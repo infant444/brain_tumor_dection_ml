@@ -202,10 +202,72 @@ rout.post("/feedback", asynchandler(
             email,
             message,
             date,
-            responce:""
+            response:""
         }
         const contectx = await ContectModel.create(contect);
         res.send(contectx);
+    }
+))
+rout.get("/send-otp/:email",asynchandler(
+    async(req,res)=>{
+        const user=await UserModel.findOne({ 'email': req.params.email, 'type': "email" })
+        console.log(user)
+        if(user){
+            var otp="";
+            for(var i=0;i<6;i++){
+                otp=otp+Math.floor(Math.random()*10)as string
+            }
+            let transporter = nodeMailer.createTransport(EMAILCOFIG);
+        let MailGenerator = new Mailgen({
+            theme: "default",
+            product: {
+                name: 'Neuro Scan',
+                link: "http://localhost:4200/",
+            },
+        })
+        let response = {
+            body: {
+                name:"Dear :"+ user.name,
+                intro: 'You recently requested to reset your password for your account. Please use the following One-Time Password (OTP) to reset your password:<br><h2>OTP: '+otp+'</h2>',
+                title: 'Reset Password',
+                outro: "Please note that this OTP is valid for a limited time and can only be used once. If you didn't request this change or if you have any questions, please contact our support team immediately.",
+                signature:false
+            }
+        }
+
+        let mail = MailGenerator.generate(response);
+        let message = {
+            from: '"🧠Neuro Scan" <' + process.env.EMAIL + '>',
+            to: user.name+ '<' + user.email + '>',
+            subject: "Reset Password",
+            html: mail,
+        }
+
+        transporter.sendMail(message).then(() => {
+            console.log("sucessfully")
+            res.json({'otp':otp})
+        }).catch(error => {
+            res.status(BAD_STATUS).send(error);
+        })
+        }
+        else{
+            res.status(BAD_STATUS).send("email not exist");
+
+        }
+    }
+))
+rout.post("/changepassword/:email",asynchandler(
+    async(req,res)=>{
+        var {password}=req.body;
+        password=password.toString()
+        console.log(password)
+        const user=await UserModel.findOne({ 'email': req.params.email, 'type': "email" })
+        password=await bycrypt.hash(password,10);
+        console.log(password)
+
+        const userx=await UserModel.findByIdAndUpdate(user?.id,{password:password})
+        res.send(userx);
+
     }
 ))
 export default rout;

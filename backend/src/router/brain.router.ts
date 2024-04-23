@@ -185,7 +185,10 @@ rout.get("/report/:userid", asynchandler(
           }
         const datex=date.split(',');
         const pdf = new pdfdocument({ margin: 1 });
-        const stream = pdf.pipe(res);
+        res.setHeader('Content-Type', 'application/pdf');
+       res.setHeader('Content-Disposition', 'attachment; filename="report.pdf"');
+        // const stream = pdf.pipe(res);
+       pdf.pipe(res);
         pdf.image("./asset/logo.png", 10, 5, {
             fit: [75, 75],
         })

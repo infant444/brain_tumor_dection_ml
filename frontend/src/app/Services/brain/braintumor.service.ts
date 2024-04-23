@@ -16,19 +16,30 @@ export class BraintumorService {
     return this.http.post<Patient>(BRAIN_TUMOR,file)
   }
 
-  getreport(id:string){
-    return this.http.get(SAMPLE_PDF+id, { responseType: 'arraybuffer' }).pipe(
-      tap({
-        next:(x)=>{
-          var file = new Blob([x], { type: 'application/pdf' });
-          var fileURL = URL.createObjectURL(file);
-          // console.log(fileURL)
-          window.open(fileURL);
-        }
-      })
-    )
+  // getreport(id:string){
+  //   return this.http.get(SAMPLE_PDF+id, { responseType: 'arraybuffer' }).pipe(
+  //     tap({
+  //       next:(x)=>{
+  //         var file = new Blob([x], { type: 'application/pdf' });
+  //         var fileURL = URL.createObjectURL(file);
+  //         // console.log(fileURL)
+  //         window.open(fileURL);
+  //       }
+  //     })
+  //   )}
 
-  }
+    getreport(id:string){
+    return this.http.get(SAMPLE_PDF+id, {responseType: 'blob' })}
+  // pipe(
+  //     tap({
+  //       next:(x)=>{
+  //         var file = new Blob([x], { type: 'application/pdf' });
+  //         var fileURL = URL.createObjectURL(file);
+  //         // console.log(fileURL)
+  //         window.open(fileURL);
+  //       }
+  //     })
+  //   )}
   getreports(id:string):Observable<Patient[]>{
     return this.http.get<Patient[]>(GETREPORT+id);
   }

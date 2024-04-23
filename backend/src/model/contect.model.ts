@@ -5,7 +5,7 @@ export interface Contect {
     email: string;
     message: string;
     date: string;
-    responce:string;
+    response:string;
 }
 
 export const ContectSchema = new Schema<Contect>(
@@ -14,7 +14,7 @@ export const ContectSchema = new Schema<Contect>(
         email: { type: String, required: true },
         message: { type: String, required: true },
         date: { type: String, required: true },
-        responce:{type:String}
+        response:{type:String}
     }, {
     toJSON: {
         virtuals: true

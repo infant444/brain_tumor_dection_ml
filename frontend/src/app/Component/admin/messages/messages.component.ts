@@ -15,6 +15,7 @@ export class MessagesComponent implements OnInit{
   ngOnInit(): void {
     this.adminservices.getAllmessage().subscribe((message)=>{
       this.message=message;
+      console.log(this.message)
     })
 
   }
@@ -32,6 +33,7 @@ export class MessagesComponent implements OnInit{
       this.toaster.success("Successfully sended");
       this.adminservices.getAllmessage().subscribe((message)=>{
         this.message=message;
+
       })
     })
   }

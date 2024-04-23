@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../../model/user';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { FEEDBACK, LOGIN, LOGIN_GOOGLE, SIGNUP } from '../../model/url';
+import { CHANGEPASSWORD, FEEDBACK, LOGIN, LOGIN_GOOGLE, SENDOTP, SIGNUP } from '../../model/url';
 import { NotifyService } from 'notify-toaster';
 import { ToastrService } from 'ngx-toastr';
 import { USER_KEY } from '../../model/Login.config';
@@ -75,6 +75,12 @@ export class UserService {
     return this.http.post(FEEDBACK,x);
   }
 
+  sendopt(email:string):Observable<any>{
+    return this.http.get<any>(SENDOTP+email);
+  }
+  changepassword(email:string,x:any):Observable<User>{
+    return this.http.post<User>(CHANGEPASSWORD+email,x)
+  }
   private setUserToLocalStorage(user: User) {
     localStorage.setItem(USER_KEY, JSON.stringify(user));
   }

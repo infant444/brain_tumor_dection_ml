@@ -8,6 +8,7 @@ import userrouter from './router/user.router';
 import chatRouter from './router/chat.router';
 import adminRouter from './router/admin.router';
 import { dbconnect } from './config/dbconnet.config';
+import path from 'path';
 dbconnect()
 const app=express()
 
@@ -17,11 +18,11 @@ app.use(cors({
     origin:["http://localhost:4200"]
 }))
 
-app.get("/",asynchandler(
-    async(req,res)=>{
-        res.send("hello world")
-    }
-))
+// app.get("/",asynchandler(
+//     async(req,res)=>{
+//         res.send("hello world")
+//     }
+// ))
 
 
 app.use("/api/braintumor",brainrouter);
@@ -29,7 +30,10 @@ app.use("/api/user",userrouter);
 app.use("/api/chat",chatRouter);
 app.use("/api/admin",adminRouter);
 
-
+app.use(express.static('public'))
+app.get("*",(req,res)=>{
+    res.sendFile(path.join(__dirname,'public','index.html'))
+})
 
 const PORT=process.env.PORT||5000;
 

@@ -42,9 +42,9 @@ rout.get("/getallmessage",asynchandler(
 
 rout.post("/sendmessage/:id",asynchandler(
     async(req,res)=>{
-        const {messagex}=req.body;
+        const {response}=req.body;
         var messageinfo=await ContectModel.findById(req.params.id);
-         messageinfo=await ContectModel.findByIdAndUpdate(req.params.id,{responce:messagex});
+         messageinfo=await ContectModel.findByIdAndUpdate(req.params.id,{response:response});
         let transporter = nodemailer.createTransport(EMAILCOFIG);
         let MailGenerator = new Mailgen({
             theme: "default",
@@ -53,17 +53,17 @@ rout.post("/sendmessage/:id",asynchandler(
                 link: "http://localhost:4200/",
             },
         })
-        let response = {
+        let responsex = {
             body: {
-                greeting:messageinfo?.name,
-                intro: messagex as string,
+                name:messageinfo?.name,
+                intro: response as string,
                 title: '<h2 style=" width:100%;color:#000;font: 1rem sans-serif;font-weight: 800;text-align: center;letter-spacing: 7px;">Welcome to Neuro Scan</h2>',
                 outro: ' <p>If you have any questions or need assistance, please don\'t hesitate to contact us.</p><br><p>Best regards,<br>Neuro Scan Team</p>',
                 signature:false
             }
         }
 
-        let mail = MailGenerator.generate(response);
+        let mail = MailGenerator.generate(responsex);
         let message = {
             from: '"🧠Neuro Scan" <' + process.env.EMAIL + '>',
             to: messageinfo?.name + '<' + messageinfo?.email + '>',

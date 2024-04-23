@@ -44,7 +44,19 @@ export class BraintumorComponent implements OnInit {
     });
     this.activarerouter.params.subscribe((params)=>{
       if(params.reportid){
-        this.braintumor.getreport(params.reportid).subscribe((x) => {
+        // this.braintumor.getreport(params.reportid).subscribe((x) => {
+        //       this.router.navigateByUrl("/")
+        //     })
+        this.braintumor.getreport(params.reportid).subscribe((data) => {
+          const blob = new Blob([data], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+          const a=document.createElement('a');
+          a.href = url;
+          a.download='report.pdf'
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+
               this.router.navigateByUrl("/")
             })
       }
